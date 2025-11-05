@@ -1,7 +1,7 @@
 use super::account::Account;
 
 pub struct Bank{
-    bank_name: String,
+    pub bank_name: String,
     accounts: Vec<Account>
 }
 
@@ -17,19 +17,18 @@ impl Bank{
      self.accounts.push(account)
     }
 
-    pub fn remove_account(&mut self,holder_name:&str){
+    pub fn remove_account(&mut self,holder_name:&str)->Result<(),String>{
     let original_length = self.accounts.len();
     self.accounts.retain(|account|account.holder_name != holder_name);
 
     if self.accounts.len() < original_length{
-            println!("Account of '{}' removed from bank.", holder_name);
+            Ok(())
         } else {
-            println!("No account found for '{}'.", holder_name);
+            Err(format!("No account found for '{}'.", holder_name))
         }
     }
     pub fn total_balance(&self)->u64{
        let total_Balance= self.accounts.iter().map(|account|account.balance).sum();
-       println!("{} has Total Balance of {}rs",self.bank_name,total_Balance);
        total_Balance
     }
 
@@ -38,8 +37,8 @@ impl Bank{
 
     }
 
-    pub fn get_account(&mut self,holder_name:&str)->&mut Account{
-       self.accounts.iter_mut().find(|a| a.holder_name == holder_name ).expect("Account not found !") 
+    pub fn get_account(&mut self,holder_name:&str)->Option<&mut Account>{
+       self.accounts.iter_mut().find(|a| a.holder_name == holder_name )
     }
     
 

@@ -12,21 +12,27 @@ impl Account{
      balance:balance
     } }
  
- pub fn deposit(&mut self,amount:u64){
-     self.balance+=amount;
-     println!("Dear {} amount {}rs Deposited to your account",self.holder_name,amount)
+ pub fn deposit(&mut self,amount:u64)->Result<(),String>{
+     if amount == 0 {
+            return Err("Deposit amount must be greater than zero.".to_string());
+        }
+        self.balance += amount;
+        Ok(())
    }
   
-  pub fn withdraw(&mut self,amount:u64){
-    if self.balance>=amount{
+  pub fn withdraw(&mut self,amount:u64)->Result<(),String>{
+     if amount == 0 {
+            return Err("Withdrawal amount must be greater than zero.".to_string());
+        } 
+     if self.balance>=amount{
         self.balance-=amount;
-        println!("Dear {} amount {}rs debited from your account",self.holder_name,amount)
+        Ok(())
     }
     else {
-            println!(
+            return Err(format!(
                 "Dear {}, insufficient balance. Cannot withdraw {}rs.",
                 self.holder_name, amount
-            );
+            ));
   }
 }
   pub fn summary(&self) -> String {
